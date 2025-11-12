@@ -36,8 +36,8 @@ const CTABanner = () => {
         stagger: 0.15, // Staggered entrance for the elements
         scrollTrigger: {
           trigger: bannerRef.current,
-          start: "top 85%", // Animation starts when 85% of the banner is visible
-          end: "bottom center",
+          start: "top 80%", // Animation starts when 85% of the banner is visible
+          end: "bottom top",
           toggleActions: "play reverse play reverse", // Play on entry, reverse on exit
         },
       });
