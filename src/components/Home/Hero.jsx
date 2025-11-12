@@ -78,11 +78,11 @@ const Hero = () => {
       {/* Text Content */}
       <div className="relative z-10 flex items-center justify-center h-full text-white text-center px-4">
         <div className="max-w-4xl space-y-6">
-          <h1 className="hero-title text-5xl sm:text-6xl font-semibold tracking-tight drop-shadow-lg">
+          <h1 className="hero-title text-4xl sm:text-6xl font-semibold tracking-tight drop-shadow-lg">
             Premium Packaging Solutions
           </h1>
 
-          <p className="hero-subtitle text-xl sm:text-xl font-semibold  drop-shadow-md">
+          <p className="hero-subtitle text-md sm:text-xl font-semibold  drop-shadow-md">
             Leading manufacturer of high-quality LD films and trusted importer
             of premium packaging materials for industries worldwide.
           </p>
