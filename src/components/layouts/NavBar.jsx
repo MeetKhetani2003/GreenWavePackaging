@@ -142,7 +142,7 @@ const NavBar = () => {
 
   const navLinks = [
     { title: "Home", path: "/" },
-    { title: "Products", path: "/products" },
+    { title: "Products", path: "/product" },
     { title: "About", path: "/about" },
     { title: "Contact", path: "/contact" },
   ];
@@ -187,7 +187,7 @@ const NavBar = () => {
                   <Link href={item.path} className={linkClasses}>
                     {item.title}
                     <span
-                      className="hover-line absolute bottom-0 left-0 h-0.5 bg-green-600 w-full"
+                      className="hover-line absolute bottom-0 left-0 h-0.5 bg-orange-600 w-full"
                       style={{
                         transform: isActive ? "scaleX(1)" : "scaleX(0)",
                         transformOrigin: isActive

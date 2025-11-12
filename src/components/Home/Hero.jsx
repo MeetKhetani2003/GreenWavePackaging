@@ -90,7 +90,7 @@ const Hero = () => {
             <button className="hero-button mt-8 px-10 py-4 bg-green-600 hover:bg-green-700 transition-colors duration-300 text-lg font-semibold rounded-md shadow-2xl transform hover:scale-105 active:scale-95">
               Explore Products
             </button>
-            <button className="hero-button mt-8 px-10 py-4 bg-yellow-600 hover:bg-yellow-700 transition-colors duration-300 text-lg font-semibold rounded-md shadow-2xl transform hover:scale-105 active:scale-95">
+            <button className="hero-button mt-8 px-10 py-4 bg-orange-500 hover:bg-orange-700 transition-colors duration-300 text-lg font-semibold rounded-md shadow-2xl transform hover:scale-105 active:scale-95">
               Contact Us
             </button>
           </div>
