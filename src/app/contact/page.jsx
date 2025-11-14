@@ -53,7 +53,7 @@ const FaPaperPlane = ({ className }) => (
   </svg>
 );
 
-const gsap = window.gsap;
+// const gsap = window.gsap;
 
 const Contact = () => {
   const sectionRef = useRef(null);

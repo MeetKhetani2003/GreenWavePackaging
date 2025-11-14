@@ -59,11 +59,11 @@ const FaAngleRight = ({ className }) => (
   </svg>
 );
 
-const gsap = window.gsap;
-const ScrollTrigger = window.ScrollTrigger;
-if (gsap && ScrollTrigger) {
-  gsap.registerPlugin(ScrollTrigger);
-}
+// const gsap = window.gsap;
+// const ScrollTrigger = window.ScrollTrigger;
+// if (gsap && ScrollTrigger) {
+//   gsap.registerPlugin(ScrollTrigger);
+// }
 
 // --- Simple Image component (for single-file constraints) ---
 const Image = React.forwardRef(
