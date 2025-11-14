@@ -1,6 +1,15 @@
 "use client";
-
+import { ALL_PRODUCTS_DATA } from "@/app/AllProducts";
 import React, { useRef, useEffect } from "react";
+const getProductListingData = () =>
+  ALL_PRODUCTS_DATA.map((p) => ({
+    id: p.id,
+    title: p.title,
+    description: p.description,
+    category: p.category,
+    image: p.image,
+    link: p.link,
+  }));
 
 /**
  * NOTE:
@@ -37,103 +46,71 @@ const ProductCard = ({ product }) => {
   const imageRef = useRef(null);
   const titleRef = useRef(null);
 
+  // Hover Logic (Simplified imports remain)
   useEffect(() => {
-    let gsap;
-    let enterTween;
-    let leaveTween;
+    const gsap = window.gsap;
+    if (!gsap || !cardRef.current) return;
+    // ... hover logic remains ...
+    const cardElement = cardRef.current;
 
-    // Only attach hover handlers if running in browser
-    if (typeof window === "undefined") return;
-
-    // create handlers that use gsap if/when it becomes available
     const handleMouseEnter = () => {
-      if (!gsap) return;
-      // kill previous tweens (avoid stacking)
-      gsap.killTweensOf(imageRef.current);
-      gsap.killTweensOf(titleRef.current);
-
-      enterTween = gsap.timeline();
-      enterTween.to(imageRef.current, {
+      gsap.to(imageRef.current, {
         scale: 1.15,
         duration: 0.5,
         ease: "power2.out",
       });
-      enterTween.to(
-        titleRef.current,
-        { x: 5, duration: 0.3, ease: "power1.out", color: "#16a34a" },
-        0
-      );
+      gsap.to(titleRef.current, {
+        x: 5,
+        duration: 0.3,
+        ease: "power1.out",
+        color: "#16a34a",
+      });
     };
-
     const handleMouseLeave = () => {
-      if (!gsap) return;
-      gsap.killTweensOf(imageRef.current);
-      gsap.killTweensOf(titleRef.current);
-      leaveTween = gsap.timeline();
-      leaveTween.to(imageRef.current, {
+      gsap.to(imageRef.current, {
         scale: 1.05,
         duration: 0.4,
         ease: "power2.out",
       });
-      leaveTween.to(
-        titleRef.current,
-        { x: 0, duration: 0.3, ease: "power1.out", color: "#111827" },
-        0
-      );
+      gsap.to(titleRef.current, {
+        x: 0,
+        duration: 0.3,
+        ease: "power1.out",
+        color: "#111827",
+      });
     };
 
-    // lazy import gsap for hover (if not already)
-    (async () => {
-      try {
-        const gsapMod = await import("gsap");
-        gsap = gsapMod.gsap || gsapMod.default || gsapMod;
-        // We do not need ScrollTrigger here; only simple hover tweens
-        // Ensure initial scale is correct
-        if (imageRef.current) {
-          gsap.set(imageRef.current, { scale: 1.05 });
-          // set will-change for smoother animation
-          imageRef.current.style.willChange = "transform";
-        }
-      } catch (e) {
-        // swallow import error — hover just won't animate
-        // console.error("GSAP import failed (hover):", e);
-      }
-    })();
-
-    const el = cardRef.current;
-    if (el) {
-      el.addEventListener("mouseenter", handleMouseEnter);
-      el.addEventListener("mouseleave", handleMouseLeave);
-      // Also support touch: use touchstart/touchend to simulate hover
-      el.addEventListener("touchstart", handleMouseEnter, { passive: true });
-      el.addEventListener("touchend", handleMouseLeave, { passive: true });
-    }
+    cardElement.addEventListener("mouseenter", handleMouseEnter);
+    cardElement.addEventListener("mouseleave", handleMouseLeave);
+    cardElement.addEventListener("touchstart", handleMouseEnter, {
+      passive: true,
+    });
+    cardElement.addEventListener("touchend", handleMouseLeave, {
+      passive: true,
+    });
 
     return () => {
-      if (el) {
-        el.removeEventListener("mouseenter", handleMouseEnter);
-        el.removeEventListener("mouseleave", handleMouseLeave);
-        el.removeEventListener("touchstart", handleMouseEnter);
-        el.removeEventListener("touchend", handleMouseLeave);
-      }
-      if (gsap) {
+      if (cardElement) {
         gsap.killTweensOf(imageRef.current);
         gsap.killTweensOf(titleRef.current);
+        cardElement.removeEventListener("mouseenter", handleMouseEnter);
+        cardElement.removeEventListener("mouseleave", handleMouseLeave);
+        cardElement.removeEventListener("touchstart", handleMouseEnter);
+        cardElement.removeEventListener("touchend", handleMouseLeave);
       }
-      if (enterTween) enterTween.kill && enterTween.kill();
-      if (leaveTween) leaveTween.kill && leaveTween.kill();
     };
   }, []);
 
   return (
     <div
       ref={cardRef}
-      className="product-list-item bg-white rounded-xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-200/50 flex flex-col h-full transform hover:-translate-y-2 hover:shadow-green-500/30"
+      className="product-list-item bg-white rounded-xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden 
+               border border-gray-200/50 flex flex-col h-full transform hover:-translate-y-2 hover:shadow-green-500/30"
       style={{ willChange: "transform, opacity" }}
     >
       <div className="relative w-full h-96 overflow-hidden bg-gray-50">
         <Image
-          ref={imageRef}
+          innerRef={imageRef}
           src={product.image || "/assets/placeholder-pkg.jpg"}
           alt={product.title}
           className="object-cover"
@@ -171,135 +148,9 @@ const ProductCard = ({ product }) => {
 
 const ProductListings = () => {
   const sectionRef = useRef(null);
+  const products = getProductListingData(); // Use accessor function
 
-  const products = [
-    {
-      title: "LD Films Pro",
-      description:
-        "Ultra-durable film rolls for heavy-duty construction and agricultural use.",
-      category: "Films",
-      image: "/assets/products/LDFilms.webp",
-      link: "/product/ld-films-pro",
-    },
-    {
-      title: "PET Film Eco",
-      description:
-        "100% PCR content film with excellent clarity for food packaging.",
-      category: "Films",
-      image: "/assets/products/PetFilms.webp",
-      link: "/product/pet-film-eco",
-    },
-    {
-      title: "BOPP Film Clear",
-      description:
-        "Superior printability and moisture barrier for high-end retail packaging.",
-      category: "Films",
-      // PATH FIX: No spaces
-      image: "/assets/products/BOPPFilm.jpeg",
-      link: "/product/bopp-film-clear",
-    },
-    {
-      title: "PVC Shrink Wrap",
-      description:
-        "High-shrink ratio film ideal for bundling and tamper-evident seals.",
-      category: "Films",
-      // PATH FIX: No spaces
-      image: "/assets/products/PVCFilm.jpeg",
-      link: "/product/pvc-shrink-wrap",
-    },
-    {
-      title: "HDPE Bags V3",
-      description:
-        "Tear-resistant high-density bags for industrial waste and storage.",
-      category: "Containers",
-      // PATH FIX: No spaces
-      image: "/assets/products/HDPEFilm.webp",
-      link: "/product/hdpe-bags-v3",
-    },
-    {
-      title: "FIBC Bulk Bags",
-      description:
-        "Woven polypropylene containers for transporting dry bulk goods safely.",
-      category: "Containers",
-      // PATH FIX: No spaces
-      image: "/assets/products/FIBCBags.jpg",
-      link: "/product/fibc-bulk-bags",
-    },
-    {
-      title: "Plastic Resin PP",
-      description:
-        "High-melt-flow polypropylene resin for injection molding applications.",
-      category: "Resins",
-      image: "/assets/products/ResinPP.webp",
-      link: "/product/plastic-resin-pp",
-    },
-    {
-      title: "LLDPE Stretch Film",
-      description:
-        "Linear low-density polyethylene film for pallet wrapping and stabilization.",
-      category: "Films",
-      image: "/assets/products/StretchFilm.jpg",
-      link: "/product/lldpe-stretch-film",
-    },
-    {
-      title: "Biodegradable Pouches",
-      description:
-        "Compostable laminated pouches for snack foods and organic goods.",
-      category: "Containers",
-      image: "/assets/products/Pouches.jpg",
-      link: "/product/biodegradable-pouches",
-    },
-    {
-      title: "PET Resin Food Grade",
-      description:
-        "Virgin PET resin suitable for beverage bottles and food contact materials.",
-      category: "Resins",
-      image: "/assets/products/PETResin.jpg",
-      link: "/product/pet-resin-food-grade",
-    },
-    {
-      title: "Metallized BOPP",
-      description:
-        "Film with an aluminum layer for enhanced light and oxygen barrier.",
-      category: "Films",
-      image: "/assets/products/MetalizedBOPP.jpg",
-      link: "/product/metallized-bopp",
-    },
-    {
-      title: "Ventilated FIBC",
-      description:
-        "Bags designed to allow airflow, perfect for storing potatoes or logs.",
-      category: "Containers",
-      image: "/assets/products/VentilatedFIBC.JPG",
-      link: "/product/ventilated-fibc",
-    },
-    {
-      title: "HDPE Geomembrane",
-      description:
-        "Thick, impermeable liner for civil engineering and environmental containment.",
-      category: "Films",
-      image: "/assets/products/Geomembrane.jpg",
-      link: "/product/hdpe-geomembrane",
-    },
-    {
-      title: "LDPE Tubing Rolls",
-      description:
-        "Continuous tubing film used for making custom-length plastic bags.",
-      category: "Films",
-      image: "/assets/products/TubingRolls.jpg",
-      link: "/product/ldpe-tubing-rolls",
-    },
-    {
-      title: "Recycled ABS Resin",
-      description:
-        "Sustainable acrylonitrile butadiene styrene resin for durable consumer goods.",
-      category: "Resins",
-      image: "/assets/products/ABSResin.jpg",
-      link: "/product/recycled-abs-resin",
-    },
-  ];
-
-  /* GSAP + ScrollTrigger effect (one effect, robust) */
+  // --- GSAP Liquid Stagger Animation (Row-by-Row) ---
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!sectionRef.current) return;
@@ -363,7 +214,6 @@ const ProductListings = () => {
     })();
 
     return () => {
-      // cleanup ScrollTriggers if they were created
       try {
         createdTriggers.forEach((t) => t && t.kill && t.kill());
         if (
@@ -371,8 +221,6 @@ const ProductListings = () => {
           window.ScrollTrigger &&
           window.gsap
         ) {
-          // extra cleanup: kill ScrollTrigger instances
-          // (not strictly necessary but safe)
           window.ScrollTrigger &&
             window.ScrollTrigger.getAll &&
             window.ScrollTrigger.getAll().forEach((t) => t.kill && t.kill());
@@ -381,7 +229,7 @@ const ProductListings = () => {
         // ignore cleanup errors
       }
     };
-  }, []); // run once on mount
+  }, []);
 
   return (
     <section
@@ -396,6 +244,7 @@ const ProductListings = () => {
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
         <div className="flex flex-col items-center mb-16">
           <h2 className="text-gray-900 font-extrabold text-center text-4xl sm:text-5xl mb-2">
             Explore All <span className="text-green-600">15 Solutions</span>
@@ -407,9 +256,10 @@ const ProductListings = () => {
           <span className="h-1.5 mt-4 w-32 bg-green-500 rounded-full py-0.2 mx-auto shadow-lg"></span>
         </div>
 
+        {/* Product Grid: 3 columns on large screens */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {products.map((product, index) => (
-            <ProductCard key={index} product={product} />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </div>

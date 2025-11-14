@@ -1,4 +1,6 @@
+// components/NavBar.jsx
 "use client";
+
 import React, { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
@@ -142,6 +144,7 @@ const NavBar = () => {
 
   const navLinks = [
     { title: "Home", path: "/" },
+    // Changed path to /product to match the base route for listings/details
     { title: "Products", path: "/product" },
     { title: "About", path: "/about" },
     { title: "Contact", path: "/contact" },
@@ -170,7 +173,13 @@ const NavBar = () => {
           {/* Desktop Navigation Links */}
           <ul className="hidden sm:flex gap-8 items-center text-lg font-medium">
             {navLinks.map((item, idx) => {
-              const isActive = currentPath === item.path;
+              // 1. Determine if the path is active using a stricter check for Home and startsWith for sections
+              const pathIsHome = item.path === "/";
+
+              const isActive = pathIsHome
+                ? currentPath === item.path // Exact match for home
+                : currentPath.startsWith(item.path); // StartsWith check for dynamic routes like /product/{id}
+
               const baseStyles =
                 "text-gray-800 transition-colors duration-300 relative inline-block py-1";
               // Enhanced active state: use subtle text color change on scroll
@@ -217,7 +226,12 @@ const NavBar = () => {
         >
           <ul className="flex flex-col space-y-1 py-4 px-4">
             {navLinks.map((item, idx) => {
-              const isActive = currentPath === item.path;
+              // Re-use the StartsWith logic for mobile links too
+              const pathIsHome = item.path === "/";
+              const isActive = pathIsHome
+                ? currentPath === item.path
+                : currentPath.startsWith(item.path);
+
               const linkClasses = `mobile-link-item block py-3 text-xl font-medium transition-colors duration-200 rounded-lg px-4 ${
                 isActive
                   ? "text-green-800 font-extrabold bg-green-100/70 border-l-4 border-green-700"
