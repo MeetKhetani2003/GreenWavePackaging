@@ -7,6 +7,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Lenis } from "@studio-freight/react-lenis";
 import Heading from "../layouts/Heading";
+import { ALL_PRODUCTS_DATA } from "@/app/AllProducts";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -79,51 +80,13 @@ const OurProducts = () => {
 
   // Note: The original products data and return statement remain the same...
 
-  const products = [
-    {
-      image: "/assets/products/LDFilms.webp",
-      title: "LD Films",
-      description:
-        "High-quality LD films offer superior strength, flexibility, and excellent clarity for various packaging applications.",
-      link: "/products/ld-films",
-    },
-    {
-      image: "/assets/products/PetFilms.webp",
-      title: "PET Films",
-      description:
-        "Exceptional heat resistance and barrier properties make these PET films ideal for durable food and industrial packaging.",
-      link: "/products/pet-films",
-    },
-    {
-      image: "/assets/products/BOPP Film.jpeg",
-      title: "BOPP Films",
-      description:
-        "Durable and versatile BOPP films provide high tensile strength, excellent clarity, and moisture barrier for laminates.",
-      link: "/products/bopp-films",
-    },
-    {
-      image: "/assets/products/PVC Film.jpeg",
-      title: "PVC Films",
-      description:
-        "Premium PVC films offering reliable clarity and stiffness, widely used in blister packaging and labeling applications.",
-      link: "/products/pvc-films",
-    },
-    {
-      image: "/assets/products/HDPE Film.webp",
-      title: "HDPE Films",
-      description:
-        "Robust, high-density polyethylene films known for their high strength-to-density ratio and superior puncture resistance.",
-      link: "/products/hdpe-films",
-    },
-    {
-      image: "/assets/products/FIBC Bags.jpg",
-      title: "FIBC Bags",
-      description:
-        "Flexible Intermediate Bulk Containers designed for the safe and efficient transport of dry, flowable materials.",
-      link: "/products/fibc-bags",
-    },
-  ];
-
+  const products = ALL_PRODUCTS_DATA.map((p) => ({
+    image: p.image,
+    title: p.title,
+    description: p.description,
+    link: p.link,
+    category: p.category,
+  }));
   return (
     <section
       ref={sectionRef}

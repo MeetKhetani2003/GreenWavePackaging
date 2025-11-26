@@ -133,10 +133,8 @@ const ProductDetailPage = () => {
       =============================== */}
       <div className="max-w-7xl mx-auto px-4 pt-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* =================================================
-              LEFT — FULL STICKY COLUMN (Thumbnails + Main Image)
-          ================================================== */}
-          <div className="sticky top-20 h-fit flex gap-4">
+          {/* LEFT — IMAGE SECTION */}
+          <div className="flex gap-4">
             {/* Thumbnails */}
             <div className="hidden sm:flex flex-col space-y-3 w-20">
               {product.detailImages.map((img, i) => (
@@ -154,7 +152,7 @@ const ProductDetailPage = () => {
               ))}
             </div>
 
-            {/* Main Image */}
+            {/* Main Image (Zoom remains active) */}
             <div
               className="relative flex-grow h-[500px] bg-white rounded-xl shadow-xl overflow-hidden"
               onMouseEnter={() => setIsZoomed(true)}
@@ -162,11 +160,12 @@ const ProductDetailPage = () => {
             >
               <Image
                 src={mainImage}
-                alt="Main"
+                alt={product.title}
                 fill
                 style={{
                   transform: isZoomed ? "scale(1.5)" : "scale(1)",
                   transition: "transform 0.4s ease-out",
+                  objectFit: "cover",
                 }}
               />
 

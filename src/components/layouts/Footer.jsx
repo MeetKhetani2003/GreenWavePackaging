@@ -7,61 +7,52 @@ import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ALL_PRODUCTS_DATA } from "@/app/AllProducts";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Footer = () => {
   const footerRef = useRef(null);
 
-  // --- GSAP Animation Logic: Staggered Entrance for all elements ---
-  useGSAP(
-    () => {
-      const footerContainer = footerRef.current;
-      if (!footerContainer) return;
+  // --- Footer Animation ---
+  useGSAP(() => {
+    const footer = footerRef.current;
+    if (!footer) return;
 
-      const columns = gsap.utils.toArray(".footer-column");
-      const bottomElements = gsap.utils.toArray(".footer-bottom-element");
+    const columns = gsap.utils.toArray(".footer-column");
+    const bottom = gsap.utils.toArray(".footer-bottom-element");
 
-      // 1. Initial State: Hide all elements
-      gsap.set([columns, bottomElements], { opacity: 0, y: 30 });
+    gsap.set([columns, bottom], { opacity: 0, y: 30 });
 
-      // 2. Create the scroll-triggered reveal animation for the whole footer
-      const tl = gsap.timeline({
+    gsap
+      .timeline({
         scrollTrigger: {
-          trigger: footerContainer,
+          trigger: footer,
           start: "top 90%",
-          toggleActions: "play reverse play reverse",
+          toggleActions: "play none none reverse",
         },
-      });
+      })
+      .to(columns, {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: "power2.out",
+        stagger: 0.15,
+      })
+      .to(
+        bottom,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          stagger: 0.1,
+        },
+        "-=0.3"
+      );
+  });
 
-      // 3. Animation Sequence:
-      tl.to(footerContainer, { opacity: 1, duration: 0.01 })
-        .to(
-          columns,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.0,
-            ease: "power2.out",
-            stagger: 0.15,
-          },
-          0
-        )
-        .to(
-          bottomElements,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power2.out",
-            stagger: 0.1,
-          },
-          ">-0.5"
-        );
-    },
-    { scope: footerRef, dependencies: [] }
-  );
-
+  // Navigation
   const navLinks = [
     { title: "Home", path: "/" },
     { title: "Products", path: "/products" },
@@ -69,16 +60,13 @@ const Footer = () => {
     { title: "Contact", path: "/contact" },
   ];
 
-  const products = [
-    { title: "LD Films", path: "/products/ld-films" },
-    { title: "PET Films", path: "/products/pet-films" },
-    { title: "BOPP Film", path: "/products/bopp-film" },
-    { title: "PVC Film", path: "/products/pvc-film" },
-    { title: "HDPE Film", path: "/products/hdpe-film" },
-    { title: "FIBC Bags", path: "/products/fibc-bags" },
-    { title: "Plastic Resins", path: "/products/plastic-resins" },
-  ];
+  // Dynamic Product List
+  const products = ALL_PRODUCTS_DATA.map((p) => ({
+    title: p.title,
+    path: p.link, // correct live route
+  }));
 
+  // Social Icons
   const socialLinks = [
     { icon: FaFacebook, href: "#", label: "Facebook" },
     { icon: FaTwitter, href: "#", label: "Twitter" },
@@ -88,14 +76,14 @@ const Footer = () => {
 
   return (
     <footer
-      className="bg-gray-50 border-t border-t-[0.01px] border-green-700/50"
       ref={footerRef}
+      className="bg-gray-50 border-t border-t-[0.01px] border-green-700/50"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Top Section: Logo and Main Links */}
+        {/* TOP CONTENT */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-8 border-b border-gray-200">
-          {/* 1. Brand Identity (Column 1) - Footer Column */}
-          <div className="footer-column col-span-1 space-y-4 text-center md:text-left mx-auto md:mx-0">
+          {/* Brand */}
+          <div className="footer-column col-span-1 text-center md:text-left space-y-4">
             <Logo />
             <p className="text-sm text-gray-600 max-w-xs">
               Committed to a greener future with innovative and sustainable
@@ -103,22 +91,19 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* 2. Quick Links and Products (Column 2) - Footer Column */}
-          <div
-            className="footer-column  col-span-1 flex justify-center gap-8 
-                          md:flex-row md:gap-16 md:justify-start md:items-start"
-          >
+          {/* Links */}
+          <div className="footer-column col-span-1 flex justify-center md:justify-start gap-12">
             {/* Quick Links */}
             <div className="text-center md:text-left">
               <h3 className="text-lg font-bold text-green-700 mb-4">
                 Quick Links
               </h3>
-              <ul className="space-y-3">
-                {navLinks.map((item, idx) => (
-                  <li key={idx}>
+              <ul className="space-y-2">
+                {navLinks.map((item, i) => (
+                  <li key={i}>
                     <Link
                       href={item.path}
-                      className="text-gray-600 hover:text-green-600 transition-colors text-base"
+                      className="text-gray-600 hover:text-green-600 transition"
                     >
                       {item.title}
                     </Link>
@@ -127,17 +112,17 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Products List */}
+            {/* Products */}
             <div className="text-center md:text-left">
               <h3 className="text-lg font-bold text-green-700 mb-4">
                 Products
               </h3>
-              <ul className="space-y-3">
-                {products.map((item, idx) => (
-                  <li key={idx}>
+              <ul className="space-y-2">
+                {products.map((item, i) => (
+                  <li key={i}>
                     <Link
                       href={item.path}
-                      className="text-gray-600 hover:text-green-600 transition-colors text-base"
+                      className="text-gray-600 hover:text-green-600 transition"
                     >
                       {item.title}
                     </Link>
@@ -147,26 +132,21 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* 3. Contact and Social Media (Column 3) - Footer Column */}
-          <div className="footer-column col-span-1 space-y-4 text-center md:text-left mx-auto md:mx-0">
-            <h3 className="text-lg font-bold text-green-700 mb-4">
-              Get in Touch
-            </h3>
+          {/* Contact & Social */}
+          <div className="footer-column col-span-1 text-center md:text-left space-y-4">
+            <h3 className="text-lg font-bold text-green-700">Get in Touch</h3>
             <p className="text-gray-600 text-base">
-              Email: info@greenwave.com
-              <br />
-              Phone: (555) 123-4567
+              Email: sales@greenwavepackaging.ca <br />
+              Phone: (437) 556-8899
             </p>
 
-            <div className="flex space-x-4 text-2xl text-green-700 pt-2 justify-center md:justify-start">
-              {socialLinks.map((social, idx) => (
+            <div className="flex justify-center md:justify-start gap-4 text-2xl text-green-700">
+              {socialLinks.map((social, i) => (
                 <a
-                  key={idx}
+                  key={i}
                   href={social.href}
                   aria-label={social.label}
-                  className="hover:text-green-500 transition-colors"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  className="hover:text-green-500 transition"
                 >
                   <social.icon />
                 </a>
@@ -175,24 +155,19 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Section: Copyright */}
-        <div className="pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 text-center">
+        {/* BOTTOM SECTION */}
+        <div className="pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
           <p className="footer-bottom-element">
-            &copy; {new Date().getFullYear()} Greenwave Packaging. All rights
+            © {new Date().getFullYear()} Greenwave Packaging. All rights
             reserved.
           </p>
-          <div className="pt-2 md:pt-0 flex space-x-4 footer-bottom-element">
-            <Link
-              href="/privacy"
-              className="hover:text-green-600 transition-colors"
-            >
+
+          <div className="footer-bottom-element flex space-x-4 pt-3 md:pt-0">
+            <Link href="/privacy" className="hover:text-green-600 transition">
               Privacy Policy
             </Link>
-            <span className="mx-2">|</span>
-            <Link
-              href="/terms"
-              className="hover:text-green-600 transition-colors"
-            >
+            <span>|</span>
+            <Link href="/terms" className="hover:text-green-600 transition">
               Terms of Service
             </Link>
           </div>

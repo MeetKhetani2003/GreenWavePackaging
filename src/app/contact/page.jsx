@@ -83,19 +83,19 @@ const Contact = () => {
     {
       icon: FaMapMarkerAlt,
       title: "Our Headquarters",
-      detail: "456 Green Solutions Parkway, Eco City, 12345",
+      detail: "7351 Vantage Wy, Delta, BC V4G 1M3, Canada",
       color: "text-green-600",
     },
     {
       icon: FaPhone,
       title: "Call Us",
-      detail: "+1 (555) 123-4567 (Sales)",
+      detail: "+1  (437) 556-8899",
       color: "text-yellow-600",
     },
     {
       icon: FaEnvelope,
       title: "Email Inquiry",
-      detail: "inquire@greenwave.com",
+      detail: "sales@greenwavepackaging.ca",
       color: "text-blue-500",
     },
   ];
@@ -234,7 +234,7 @@ const Contact = () => {
                 className="w-full h-full border-0"
                 loading="lazy"
                 allowFullScreen
-                src="https://maps.google.com/maps?q=Packaging%20Manufacturer&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2610.3399147366667!2d-123.022045!3d49.1371703!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5485df87994665d1%3A0x7c5a017ca8f460ae!2sGreenwave%20Packaging%20Ltd.!5e0!3m2!1sen!2sin!4v1764168577677!5m2!1sen!2sin"
               ></iframe>
             </div>
           </div>

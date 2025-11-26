@@ -44,6 +44,7 @@ const ProductCard = ({ product }) => {
 
         {/* Action Button */}
         <button
+          onClick={() => (window.location.pathname = product.link)}
           className="mt-auto w-full px-6 py-3 bg-green-600 text-white font-semibold text-lg rounded-xl 
                      hover:bg-green-700 transition-colors duration-300 shadow-xl shadow-green-500/40 
                      transform hover:scale-[1.01] active:scale-95"
