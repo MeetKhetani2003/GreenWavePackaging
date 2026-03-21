@@ -1,0 +1,33 @@
+{
+  "name": "green-wawe-packaging",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "biome check",
+    "format": "biome format --write"
+  },
+  "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "@studio-freight/react-lenis": "^0.0.47",
+    "gsap": "^3.13.0",
+    "install": "^0.13.0",
+    "mongoose": "^8.19.3",
+    "next": "16.0.7",
+    "nodemailer": "^7.0.11",
+    "npm": "^11.6.4",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-google-recaptcha": "^3.1.0",
+    "react-google-recaptcha-v3": "^1.11.0",
+    "react-icons": "^5.5.0",
+    "react-toastify": "^11.0.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.0",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4"
+  }
+}
